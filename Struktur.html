@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Meine To-do App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="loginBereich">
+    <h1>Login</h1>
+    <input id="name" placeholder="Dein Name">
+    <button onclick="einloggen()">Einloggen</button>
+  </div>
+
+  <div id="appBereich">
+    <h1 id="begruessung">Meine To-do App ✅</h1>
+
+    <input id="aufgabe" placeholder="Neue Aufgabe eingeben">
+    <button onclick="aufgabeHinzufuegen()">Hinzufügen</button>
+    <button onclick="ausloggen()">Ausloggen</button>
+
+    <ul id="liste"></ul>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
