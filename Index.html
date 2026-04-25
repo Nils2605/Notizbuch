@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Meine To-do App</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f4f4f4;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    input {
+      padding: 10px;
+      width: 220px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background: white;
+      margin: 10px auto;
+      padding: 10px;
+      width: 350px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 5px;
+    }
+
+    .erledigt {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .loeschen {
+      background: red;
+      color: white;
+      border: none;
+    }
+
+    #appBereich {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="loginBereich">
+    <h1>Login</h1>
+    <input id="name" placeholder="Dein Name">
+    <button onclick="einloggen()">Einloggen</button>
+  </div>
+
+  <div id="appBereich">
+    <h1 id="begrüssung">Meine To-do App ✅</h1>
+
+    <input id="aufgabe" placeholder="Neue Aufgabe eingeben">
+    <button onclick="aufgabeHinzufuegen()">Hinzufügen</button>
+    <button onclick="ausloggen()">Ausloggen</button>
+
+    <ul id="liste"></ul>
+  </div>
+
+  <script>
+    let aufgaben = [];
+
+    function einloggen() {
+      let name = document.getElementById("name").value;
+
+      if (name === "") {
+        alert("Bitte gib deinen Namen ein.");
+        return;
+      }
+
+      localStorage.setItem("benutzerName", name);
+
+      loginAnzeigen();
+    }
+
+    function ausloggen() {
+      localStorage.removeItem("benutzerName");
+
+      document.getElementById("loginBereich").style.display = "block";
+      document.getElementById("appBereich").style.display = "none";
+    }
+
+    function loginAnzeigen() {
+      let name = localStorage.getItem("benutzerName");
+
+      if (name) {
+        document.getElementById("loginBereich").style.display = "none";
+        document.getElementById("appBereich").style.display = "block";
+        document.getElementById("begrüssung").innerText = "Hallo " + name + " 👋";
+      }
+    }
+
+    function aufgabenLaden() {
+      let gespeicherteAufgaben = localStorage.getItem("aufgaben");
+
+      if (gespeicherteAufgaben) {
+        aufgaben = JSON.parse(gespeicherteAufgaben);
+      }
+
+      listeAnzeigen();
+    }
+
+    function aufgabenSpeichern() {
+      localStorage.setItem("aufgaben", JSON.stringify(aufgaben));
+    }
+
+    function aufgabeHinzufuegen() {
+      let eingabe = document.getElementById("aufgabe").value;
+
+      if (eingabe === "") return;
+
+      let neueAufgabe = {
+        text: eingabe,
+        erledigt: false
+      };
+
+      aufgaben.push(neueAufgabe);
+
+      document.getElementById("aufgabe").value = "";
+
+      aufgabenSpeichern();
+      listeAnzeigen();
+    }
+
+    function erledigtUmschalten(index) {
+      aufgaben[index].erledigt = !aufgaben[index].erledigt;
+
+      aufgabenSpeichern();
+      listeAnzeigen();
+    }
+
+    function aufgabeLoeschen(index) {
+      aufgaben.splice(index, 1);
+
+      aufgabenSpeichern();
+      listeAnzeigen();
+    }
+
+    function listeAnzeigen() {
+      let liste = document.getElementById("liste");
+      liste.innerHTML = "";
+
+      for (let i = 0; i < aufgaben.length; i++) {
+        let li = document.createElement("li");
+
+        let text = document.createElement("span");
+        text.innerText = aufgaben[i].text;
+
+        if (aufgaben[i].erledigt) {
+          text.className = "erledigt";
+        }
+
+        text.onclick = function () {
+          erledigtUmschalten(i);
+        };
+
+        let btn = document.createElement("button");
+        btn.innerText = "X";
+        btn.className = "loeschen";
+
+        btn.onclick = function () {
+          aufgabeLoeschen(i);
+        };
+
+        li.appendChild(text);
+        li.appendChild(btn);
+
+        liste.appendChild(li);
+      }
+    }
+
+    loginAnzeigen();
+    aufgabenLaden();
+  </script>
+
+</body>
+</html>
