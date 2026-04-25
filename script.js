@@ -1,5 +1,7 @@
 let aufgaben = [];
 
+// LOGIN
+
 function einloggen() {
   let name = document.getElementById("name").value;
 
@@ -29,6 +31,8 @@ function loginAnzeigen() {
   }
 }
 
+// AUFGABEN LADEN & SPEICHERN
+
 function aufgabenLaden() {
   let gespeicherteAufgaben = localStorage.getItem("aufgaben");
 
@@ -37,11 +41,14 @@ function aufgabenLaden() {
   }
 
   listeAnzeigen();
+  
 }
 
 function aufgabenSpeichern() {
   localStorage.setItem("aufgaben", JSON.stringify(aufgaben));
 }
+
+// AUFGABE HINZUFÜGEN
 
 function aufgabeHinzufuegen() {
   let eingabe = document.getElementById("aufgabe").value;
@@ -61,12 +68,16 @@ function aufgabeHinzufuegen() {
   listeAnzeigen();
 }
 
+// ERLEDIGT UMSCHALTEN
+
 function erledigtUmschalten(index) {
   aufgaben[index].erledigt = !aufgaben[index].erledigt;
 
   aufgabenSpeichern();
   listeAnzeigen();
 }
+
+// AUFGABE LÖSCHEN
 
 function aufgabeLoeschen(index) {
   aufgaben.splice(index, 1);
@@ -75,8 +86,22 @@ function aufgabeLoeschen(index) {
   listeAnzeigen();
 }
 
+// LISTE ANZEIGEN
+
 function listeAnzeigen() {
   let liste = document.getElementById("liste");
+  let fortschritt = document.getElementById("fortschritt");
+let erledigte = aufgaben.filter(function(aufgabe) {
+  return aufgabe.erledigt;
+}).length;
+
+fortschritt.innerText = erledigte + " von " + aufgaben.length + " Aufgaben erledigt";
+
+  if (aufgaben.length === 0) {
+    liste.innerHTML = "<p>Keine Aufgaben vorhanden 🧘‍♂️</p>";
+    return;
+  }
+
   liste.innerHTML = "";
 
   for (let i = 0; i < aufgaben.length; i++) {
@@ -107,6 +132,16 @@ function listeAnzeigen() {
     liste.appendChild(li);
   }
 }
+
+// ENTER-TASTE
+
+document.getElementById("aufgabe").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    aufgabeHinzufuegen();
+  }
+});
+
+// INITIAL START
 
 loginAnzeigen();
 aufgabenLaden();
