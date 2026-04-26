@@ -1,30 +1,102 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Meine To-do App</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mein Notizbuch</title>
+    <link rel="stylesheet" href="Style.css" />
+  </head>
 
-<body>
+  <body>
+    <div id="loginBereich" class="login-container">
+      <div class="login-box">
+        <h1>👋 Willkommen</h1>
+        <p>Gib deinen Namen ein</p>
+        <input id="name" placeholder="Dein Name" class="login-input" />
+        <button onclick="einloggen()" class="login-btn">Einloggen</button>
+      </div>
+    </div>
 
-  <div id="loginBereich">
-    <h1>Login</h1>
-    <input id="name" placeholder="Dein Name">
-    <button onclick="einloggen()">Einloggen</button>
-  </div>
+    <div id="appBereich" style="display: none">
+      <div class="container">
+        <header class="header">
+          <h1 id="begruessung">Meine To-do App ✅</h1>
+          <div class="header-actions">
+            <button onclick="ausloggen()" class="btn-logout">Ausloggen</button>
+          </div>
+          <div class="progress-section">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-text" id="fortschritt"
+              >0 von 0 Aufgaben erledigt</span
+            >
+          </div>
+        </header>
 
-  <div id="appBereich">
-    <h1 id="begruessung">Meine To-do App ✅</h1>
+        <main class="main-content">
+          <section class="filters">
+            <button class="filter-btn active" onclick="filterSetzen('alle')">
+              Alle
+            </button>
+            <button class="filter-btn" onclick="filterSetzen('offen')">
+              Offen
+            </button>
+            <button class="filter-btn" onclick="filterSetzen('erledigt')">
+              Erledigt
+            </button>
+          </section>
 
-    <input id="aufgabe" placeholder="Neue Aufgabe eingeben">
-    <button onclick="aufgabeHinzufuegen()">Hinzufügen</button>
-    <button onclick="ausloggen()">Ausloggen</button>
+          <section class="add-task-section">
+            <h2>Neue Aufgabe hinzufügen</h2>
+            <div class="input-group">
+              <input
+                id="aufgabe"
+                type="text"
+                placeholder="Aufgabenbeschreibung..."
+                class="task-input"
+              />
+              <div class="meta-inputs">
+                <input
+                  id="faelligDatum"
+                  type="date"
+                  class="meta-input date-input"
+                />
+                <select
+                  id="prioritaetSelect"
+                  class="meta-input priority-select"
+                >
+                  <option value="niedrig">Priorität: Niedrig</option>
+                  <option value="mittel" selected>Priorität: Mittel</option>
+                  <option value="hoch">Priorität: Hoch</option>
+                </select>
+              </div>
+              <button onclick="aufgabeHinzufuegen()" class="btn-add">
+                Hinzufügen
+              </button>
+            </div>
+          </section>
 
-    <ul id="liste"></ul>
-    <p id="fortschritt"></p>
-  </div>
+          <section class="tasks-section">
+            <ul id="liste" class="tasks-list"></ul>
+          </section>
+        </main>
+      </div>
+    </div>
 
-  <script src="script.js"></script>
+    <!-- Bestätigungsdialog -->
+    <div class="dialog-overlay" id="dialogOverlay"></div>
+    <div class="dialog" id="confirmDialog">
+      <h2>Aufgabe löschen?</h2>
+      <p id="dialogMessage">
+        Diese Aktion kann nicht rückgängig gemacht werden.
+      </p>
+      <div class="dialog-actions">
+        <button class="btn-cancel" onclick="closeDialog()">Abbrechen</button>
+        <button class="btn-delete" onclick="confirmDelete()">Löschen</button>
+      </div>
+    </div>
 
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
